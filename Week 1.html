@@ -7,16 +7,46 @@
 
 <div style="margin-left:15%;padding:1px 16px;height:1000px;">
 
-<!-- This is boilerplate end -->
+<!-- your thoughts, impressions, and any conclusions based on the material  -->
 
 <div class = "row">
 <div class = "col-9">
 
 <h1>CS373 Weekly Write-Up 1</h1>
-<p></p>
+<p>This first week had a lot of interesting material. I was already familiar with the main reasons that malware is used 
+(Defacement / Destruction,
+Recon / Spying,
+Political Gain,
+Financial Gain) and who tries to use malware (basicaly everyone and anyone as it is fairly easy to get ahold of, but especialy governments and large corperations).
+I was also familiar with the basic types of malware, however I was unfamiliar with the specific terms like "Downloader" (downloads more files), "Parasitic" (requires another file to survive), and "Polymorphic" (changes its structure/name to hide), 
+with the later being perticulatly interesting. I was suprised to learn that these complex types of viruses are in the extreem minority, with most malware being essentialy "kits" bought online.
+ 
+We also covered a few of the ways a system can become infected, with an emphasis on the fact that there are a large number of ways a system can be compromised.
+It was interesting to learn that a lot of malware is specificaly targeted, in a process called the "APT-Kill-Chain", 
+ which covers the steps taken to identify a system, create and deploy software to exploit the specific system, and the progression to acting on their objective. 
+ </p>
+ 
+ 
+ <p>
+	The most interesting part of this week's lecture was the breakdown of how a peice of malicious software is analized once it has been isolated. Most of the analisis for a peice of malicious software 
+	happends after it is run on either a virtual machine or on a goat (a computer set aside to run the actual malware), with special tools to do everything from monitor/record processes, explore active process details, 
+	prevent windows from closing, and pretend to be a internet conection, just to name the tools that we had available for our first homework assignment.
+	
+	What follows is a sort of patern-matching/connect the dots game where you use the information provided by the tools to see where the software goes and what the software is trying to do, ocationaly letting it succeed so that you can follow it to the next step. 
+	Once it is clear what a piece of software does and what it's signiture is, it can be added to anti-virus detection. 
+	
+	
+ </p>
 
-
-
+ <p>The final topic we convered was Static Analisis, where you analize the source of the malware itself (as oposed to dynamic analisis where you observe the program in action).
+	This can take the form of String Analysis, where you dump the strings and read through for malicious behaviors, Source Analisis where you use a decompiler to get the origional code from the exe, 
+	and Binary Analisis where you observe the hex code for the project. 
+	The biggest challenge with this is encription, as there are many ways a programer could encript their code, including tactics like "bit-fliping" which swaps the values in a hex block.
+	
+ </p>
+ 
+ <p> I enjoyed learning the basic ins and outs of malware, from the types to the situations and indeviduals involved. I also enjoyed learning the basics of how malware is 
+ understood and reverse-engineered, and how we could apply this process in the first assignment. While overcoming the learning curve on the tools was a little frusterating, I look forward to being able to apply what I now know to the future assignments.</p>
 </div>
 </div>
 </div>
