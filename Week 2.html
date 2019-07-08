@@ -38,35 +38,35 @@ Usernames and Passwords, all running device drivers, and more. The memory dump c
 The tool allows us to easily do a Memory Dump (unfortunately FTK imager and all other tools will have some impact on the memory content, it is unavoidable), 
 which would always be moved off system, but in this case (as it is a VM and a class setting) that is unnecessary:
 </p>
- <p><img src="./images/w2_1.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+ <p><img src="Images/w2_1.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
  
  <p>Using “Add Evidence” to mount a physical drive (in this case we don't have one so we just use the VM’s drive as an example), 
  allows us to get a quick view without tampering with evidence. It also lets us copy out certain useful files like the master table: </p>
- <p><img src="./images/w2_2.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+ <p><img src="Images/w2_2.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
  <p>We can also capture a Disk Image, with the added built in options for encryption and have the checksum calculated before and after to 
  verify the image, as before this should be saved off system, however in this case it was unnecessary:</p>
- <p><img src="./images/w2_3.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+ <p><img src="Images/w2_3.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
   <h3>     3. The Volatillity Tool</h3>
 
  <p>Volatility is a tool provided to us, and demonstrated in lab, used for analyzing memory dumps like the one created previously with the
  FTK Imager. The command { volatility.exe -f [myMemDumpName] imageinfo } gathers basic  information about memory dump, like the operating 
  system version, hardware details, and the date/time the memory dump was created:</p>
- <p><img src="./images/w2_3.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+ <p><img src="Images/w2_3.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
  <p>We can also run a process scan with the command 
 { volatility.exe -f [myMemDumpName] --profile=Win7SP0x86 psscan }  
 Giving a list of all running processes when the memory dump was created: 
 </p>
- <p><img src="./images/w2_4.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+ <p><img src="Images/w2_4.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
  <p>There other useful volatility commands we were introduced to like netscan which shows network activity, deskscan which shows activity 
  on the desktop, getsids and to see which user rights a process was running (useful for malware).
 </p>
  <h2>In Advanced Forensics 2:</h2>
  <p>Using volatility, we can create a timeline and parse the master table we were able to grab earlier using timeliner and mftparser 
  (screencap is of the timeliner output file):</p>
- <p><img src="./images/w2_5.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+ <p><img src="Images/w2_5.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
  <p>The final major topic was on data recovery, and using data carver tools like Photorec to search for specific signatures in the 
  header/footer to carve out specific types of files. </p>
- <p><img src="./images/w2_6.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+ <p><img src="Images/w2_6.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
  <h2>Conclusion/Thoughts: </h2>
  <p>     This week was much more about hands on work with new tools as oposed to new concepts (relative to the previous week), with almost 
  an hour less in lecture time, leaving a lot more time to get familiar with the 
