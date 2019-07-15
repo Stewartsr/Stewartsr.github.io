@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="MainCSS.css">
+</head>
+<body>
+
+<div style="margin-left:15%;padding:1px 16px;height:1000px;">
+
+<!-- your thoughts, impressions, and any conclusions based on the material  -->
+
+<div class = "row">
+<div class = "col-9">
+
+<h1>CS373 Weekly Write-Up 3</h1>
+ <p>This week, now that we have already covered Identifying malware by its effects, we began to cover defence against malware by analyzing some samples and writing our own 
+ AV detection code in yara. </p>
+ 
+ <h2>In Malware Defenses Lesson 1 we covered these areas:</h2>
+ <h3>     1. The Attack Graph</h3>
+  <p>The attack graph covers the 4 main stages of a malware attack, beginning with “First Contact”. First contact works just like we have learned in previous lectures, 
+  with many different vectors for infection.  The most common are email (like worms), Malvertising (fake advertising on websites), Watering Hole, and Instant Messaging, 
+  with less common examples like Physical Access and Poisoned search results (only less common if using a highly engineered search engine like google). These tend to rely 
+  on social engineering, or exploiting a weakness in the system, and sometimes a combination of both. 
+</p>
+  <p>The 2nd stage is Local Execution. This is fairly straightforward, the malicious program needs some way to execute itself or convince a user to execute the code. 
+  Like before, execution relies on either social engineering (clicking on a link from a friend in an email) or an exploit in the system (like abusing the auto-run). 
+</p>
+ <p>The 3rd stage is more complicated, titled “Establish Presence” this is the part of the attack where the program needs to blend in or hide so that it is not scrubbed by 
+ the AV or even just noticed by a particularly observant user. Tactics for blending in include having file names that mimic the naming structures in the OS, changing the 
+ timestamps, and signed binaries so that the AV wont detect it. More complex methods include using a Bootkit or Rootkit to hide the files or other similar tasks. 
+</p>
+ <p>The 4th stage is Malicious Activity, where the malware is running and attempting to accomplish its goals, whatever those may be. 
+</p>
+ <p>The question of defense becomes “How do we stop malicious programs at each stage?” so that if the malware gets past one layer it is not free to proceed to the next. 
+ A good malware defense does this using a number of strategies including traditional file scanning, checking the registry and cookies, cloud scanning, memory scanning, 
+ decomposition, and more. From here we began Lab 1.</p>
+
+ 
+ 
+ <h3>     2. Yara and more advanced yara signatures.</h3>
+  <p>For the first lab we began to work with Yara, a malware identification tool that uses rules and conditions to match with and identify potential malware files.
+</p>
+ <p>In the first part of the first lab we used both the yara editor and  FileInsight to take a look at the first sample group of malware files.  FileInsight is 
+ particularly useful as it’s “StringsAll” plugin lets us pull a large number of strings from the file that we can search through for patterns. 
+</p>
+ <p><img src="Images/w3_1.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+  <p><img src="Images/w3_2.PNG" alt="HTML5 Icon" style="width:500px;height:400px;" class="center"></p>
+ <p><img src="Images/w3_3.PNG" alt="HTML5 Icon" style="width:500px;height:400px;" class="center"></p>
+
+ <p>By analysing the strings we can see potentially malicious strings that the files have in common, like “OFTWARE\Borland\Delphi\RTL”, “Jenna Jam”, and “AikaQus”.</p>
+  <p>We can use these strings in our rules in yara to identify the files like so:</p>
+  <p><img src="Images/w3_5.PNG" alt="HTML5 Icon" style="width:500px;height:200px;" class="center"></p>
+
+ <p>And we can see that it properly catches the files when run in the command line:</p>
+   <p><img src="Images/w3_4.PNG" alt="HTML5 Icon" style="width:500px;height:400px;" class="center"></p>
+
+ <p>It turns out my string “Borland” that is looking to catch the language the malware is written in is actually unnecessary as the instructors yara code, provided in the 
+ lab debrief, only contains Jenna Jam and AikaQ and still catches all files, however I chose to leave mine in. 
+</p>
+ <p>We then moved on to the 2nd sample group. To get this set covered we need to look for the particular exploit being used by the files, specifically Downloader ActiveX.
+</p>
+   <p><img src="Images/w3_6.PNG" alt="HTML5 Icon" style="width:500px;height:250px;" class="center"></p>
+
+ <p>We finally wrap up with the 3rd set, and while this is where the lecture videos end I was still able to take a good swing at it. The auto-generated strings weren’t 
+ particularly helpful to me, however manual string evaluation lead me to a couple suspect strings.  Using a weird AVG search (the malware is asking if there is AVG 
+ installed) and the DigiCert strings I was able to catch 21 of the files
+</p>
+   <p><img src="Images/w3_7.PNG" alt="HTML5 Icon" style="width:500px;height:300px;" class="center"></p>
+
+ <p>As I entered the 2nd set of lectures I discovered that the Instructor has similar yara code to what I was able to find:</p>
+    <p><img src="Images/w3_8.PNG" alt="HTML5 Icon" style="width:500px;height:200px;" class="center"></p>
+
+ <p>This yara code has one of the 3 strings in common with mine, which suggests that “DigiCert” might generate false positives and that I should look into it more. 
+ Tuguu is an adware distributor, so that string is a giveaway that I initially missed. 
+</p>
+ <p>This method of AV (file detection) is most useful before a file has executed.  
+</p>
+
+ <h2>Malware Defenses Lesson 2:</h2>
+ <p>AV Automation is becoming more and more common to keep up with the creation of new malware. While they are fast and effective at chewing through lots of malware, 
+ automated analysis is considered “out of context” that is, not operating in the real world. Because of this it is possible for malware to detect that it is in a virtual 
+ machine and can evade the automated system. One new tool that we will be using is Cuckoo, which can be used to automate the analysis process.
+</p>
+ <h3>     3. Cuckoo for automated analysis.</h3>
+ <p>We are given 4 files beginning 068D, 0067, 4844, and A187. Of which it looks like only 4844 is safe
+</p>
+ <p>068D:</p>
+     <p><img src="Images/w3_10.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+
+ <p>Info: As we can see from the Cuckoo log it creates a suspect file “wm.ime” and accessed KeyHandle, a lot, and registry values relating for the  keyboard are accessed 
+ multiple times.
+</p>
+ <p>Conclusion: It might be a keylogger, although im not certain. 
+</p>
+
+ <p>0067:
+</p>
+
+     <p><img src="Images/w3_11.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+	 <p><img src="Images/w3_12.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+ <p>Info: It creates a strange file called dx.bat, accesses the registry keys for HideDesktopIcons (most likely responsible for the creation of an Internet Explorer 
+ link that then promptly disappeared), and tries to open the unknown file qusla.exe. also see image 2 when I tried to delete the .csv files and the bad.exe to prepare 
+ for the next file, something very strange is going on.
+</p>
+ <p>Conclusion: Malicious, although I'm not 100% sure what its doing.
+</p>
+
+
+
+ <p>A187:
+</p>
+	 <p><img src="Images/w3_13.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+
+ <p>Info: Like the other 2 this program creates a number of weird files like “deleteme.bat” and “ntshruis2.dll.bin”, it also tries to access a file called prints.exe. 
+ “Bad” was also deleted upon completion.
+</p>
+ <p>Conclusion: Probably malicious
+</p>
+
+
+
+ <p>4844:
+</p>
+	 <p><img src="Images/w3_14.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+
+ <p>Unlike the others, 4844 does not appear to do anything strange. It claims that its freeware called “LADS”, and while that by itself isn’t an indicator of cleanliness,
+ their doesn’t seem to be anything suspicious in the logs.
+</p>
+
+ <p></p>
+ <p></p>
+ <p></p>
+ <p></p>
+ <p></p>
+
+
+</div>
+</div>
+</div>
+
+</body>
+</html>
