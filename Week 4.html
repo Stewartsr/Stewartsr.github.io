@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="MainCSS.css">
+</head>
+<body>
+
+<div style="margin-left:15%;padding:1px 16px;height:1000px;">
+
+<!-- your thoughts, impressions, and any conclusions based on the material  -->
+
+<div class = "row">
+<div class = "col-9">
+
+<h1>CS373 Weekly Write-Up 4</h1>
+ <p>Similar to last week, this week focused more on getting familiar with methods, tools, and hands on practice.  </p>
+ 
+ <h2>Software Vulnerabilities and Common Exploits Lesson 1
+</h2>
+<p>We started by going over how people can manipulate software through the use of vulnerabilities. The 2 kinds of vulnerabilities in software are Configuration Vulnerabilities (where the threat comes more from the intended users then from the software itself, like  email phishing) and Software Vulnerabilities (where a bug or exploitable behavior within the software allows the attacker to change the behavior).
+</p>
+<p>In this weeks labs we are going to be working with memory corruption by overloading the stack, which can be used to put new values into variables, change the program flow, and more. This is known as the vulnerability trigger, the thing that invokes the software bug that lets us control the program. In our case we are working toward using a specific exploit to get Internet Explorer to open the calculator, this is called the Payload, the action we are trying to perform once we have control.
+</p>
+
+ <p>The numbers correspond to questions/steps in the exploitation lessons and are acompanied by breif answers and a relevent screenshot of the VM </p>
+
+ <h3>     Lab 1 Lesson 1: Getting Familiar with WinDbg
+</h3>
+ <p>1. 54430000</p>
+<p>Useful Command: lm </p>
+<p>2. 19000
+</p>
+<p>Useful Command: !teb 
+</p>
+<p>3. 200000
+</p>
+<p>Useful Command: !peb
+</p>
+<p>4.  54431df0</p>
+<p>No command - its where we set the breakpoint
+</p>
+<p>5. 0x14 (20 bytes)
+</p>
+<p>Useful Command: u eip L10
+</p>
+<p>6. FluffyBunniesDontFlapOrQuack
+</p>
+<p>Useful Command: du poi(esp)
+</p>
+<p>7. 10 times
+</p>
+<p>8. 31337
+</p>
+<p>Useful Command: .formats eax
+</p>
+<p>9. The Stack
+</p>
+<p>Useful Command: !address esi
+</p>
+<p><img src="Images/w4_1.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+<p><img src="Images/w4_2.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+<p><img src="Images/w4_3.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+<p><img src="Images/w4_4.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+<p><img src="Images/w4_5.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+<p><img src="Images/w4_6.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+<p><img src="Images/w4_7.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+
+ <h3>Lab 1 Lesson 2: Exploiting the Stack</h3>
+ <p>Stack Behavior:</p>
+ <p>1. 54431e80
+</p>
+ <p>Useful command: k
+</p>
+ <p>2. 3 parameters
+</p>
+ <p>3. Dec: func(int i, string *s, bool b);     Func  Call: func(10, “10”, TRUE);
+</p>
+<p><img src="Images/w4_8.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ <p>Crash Triage:
+</p>
+ <p>1. eip, ebp
+</p>
+<p><img src="Images/w4_9.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ <p>2. eax, esi, esp
+</p>
+<p><img src="Images/w4_10.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ <p>3. 544320e0</p>
+ <p><img src="Images/w4_11.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ <p>4. 0x400 (1024 bytes)
+</p>
+ <p><img src="Images/w4_12.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ <p>Now that we are familiar with WinDbg we can begin to get familiar with how to exploit the specific vulnerabilities in the stack.
+</p>
+
+
+ <p>Exploiting:
+</p>
+ <p>1. EIP is overwritten at offset 1028
+</p>
+ <p><img src="Images/w4_13.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ <p>3. The address of a jmp esp(ff e4) is 54432437
+</p>
+ <p>Useful Commands: 
+</p>
+ <p>lmf m FSExploitMe</p>
+ <p>S 54430000 5443b000 ff e4
+</p>
+ <p>5. The change requires 4 bytes of filler 
+</p>
+ <p>6. Results of all changes to Lesson2.js:
+</p>
+ <p><img src="Images/w4_14.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+ <p><img src="Images/w4_15.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ 
+ <h2>Software Vulnerabilities and Common Exploits Lesson 2
+</h2>
+ <p>The 2nd lecture focuses on Windows debugging so that we can be prepared for next week’s topic. The lecture videos go over the 2nd lesson/exercise from the previous section in my report, which I was unfortunately unaware of until after I finished the lesson.  From there we move on to the 3rd lesson. The focus is on Use-After-Free exploits, which is a heap exploit, where you free an object, replace it with a new one, position the shell code, and then use the object again. 
+</p>
+<h3>Lesson 3: Heap Loads of Fun</h3>
+ <p>Heap Objects:
+</p>
+ <p><img src="Images/w4_16.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ <p>1. 8 bytes
+</p>
+ <p>Useful Command: !heap -p -a -ecx
+</p>
+ <p>2. stackTimeClass
+</p>
+ <p>Useful Command: !heap -p -a -ecx
+</p>
+ <p>Useful Command: !heap -p -a -ecx
+</p>
+ <p>U poi(poi(ecx))
+</p>
+ <p><img src="Images/w4_17.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ <p>Triage to Exploit:
+</p>
+ <p><img src="Images/w4_18.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ <p>1. 544324d0</p>
+ <p>!heap -p -a eax
+</p>
+ <p>2. 74
+</p>
+ <p>bp  544324d0
+</p>
+ <p>!heap -p -a poi(esp+8)
+</p>
+ <p>After the remainder of the changes, running the exploit bring up the calculator as expected:
+</p>
+ <p><img src="Images/w4_19.PNG" alt="HTML5 Icon" style="width:400px;height:400px;" class="center"></p>
+
+ <p>Conclusion:
+</p>
+
+ <p>This week the labs took longer than previously, partly due to all of the questions in each section. I found the questions to be helpful in learning how to utilize WinDbg to exploit the stack and heap using a vulnerability within Internet explorer. I am looking forward to next week and the 2nd homework assignment of the term.
+</p>
+
+
+</div>
+</div>
+</div>
+
+</body>
+</html>
