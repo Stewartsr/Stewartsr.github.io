@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="MainCSS.css">
+</head>
+<body>
+
+<div style="margin-left:15%;padding:1px 16px;height:1000px;">
+
+<!-- your thoughts, impressions, and any conclusions based on the material  -->
+
+<div class = "row">
+<div class = "col-9">
+
+<h1>CS373 Weekly Write-Up 5</h1>
+ <p>This week the lectures began with a refresher on what we have gone through in the class so far and then focused on helping us understand the concept of stealth by means of memory manipulation. 
+</p>
+  <p>Stealth by means of memory manipulation is done primarily through rootkits, which are malware that actively conceals its existence and actions from users and system processes. A rootkit is able to do this by operating at the kernel level (.sys files) instead of at the user level (.exe and .dll), giving it essentially complete control. Rootkits are extremely difficult to deal with once they are in, so defence against them is mostly about stopping the rootkit from infiltrating the system. This is because they operate at the same level (or lower) than anti-virus software, are once they are in place they have all the permissions and control needed to hide or even find and kill AV processes. 
+</p>
+ <p>Rootkits have a powerful tool in their arsenal called API hooking, which is where the malware access the system service description table and edits the memory pointers to point to the malicious code that the attacker wants to run, the bad code is then run in the place of whatever was at the original pointer, and then the malware jumps back the the original API call location so that no red flags get raised.
+</p>
+ <p> The primary lab is titled “Agony”, and offers us a look into how rootkits work.
+</p>
+
+ <h2>Agony Lab:</h2>
+ <p>The lab begins with running analizer.py, which we get familiar with in the previous week, on the now renamed “bad” malware file (Agony). 
+</p>
+
+<p><img src="Images/w5_1.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+
+ <p>I can then run the command  “dir *.sys” to bring up normally hidden system files, which shows us the new file “wininit.sys”. This comes up now where it wouldn't with the command “dir *.*” due to differences in the API’s being called.
+</p>
+
+<p><img src="Images/w5_2.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+
+ <p>Using the tool Tuluka we can clearly see that the rootkit is hooking in its new code, changing pointers, and filtering on the name “wininit.sys”
+</p>
+
+<p><img src="Images/w5_3.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+
+ <p>I can then take a look using LiveKD, which is a tool that can read Windows kernel memory and display it on the shell. 
+</p>
+ 
+<p><img src="Images/w5_4.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+ <p>From here I can compare the code at the old and new address for NtEnumerateValueKey to see that it now points to the code in “wininit.sys”. Fortunately LiveKD has a quick tool to correct the pointers which un-hides “wininit.sys”. The last important command from the lab is “dps nt!kiServiceTable L191” which gives a list of all API’s running. This is another way to spot the address change with the new bad file.
+</p>
+<p><img src="Images/w5_5.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+ <p>We then explored the use of the tool Process Hacker, getting basic familiarity with its functions. Process Hacker lets us walk through the memory for running processes. From here we went on to further analyze the Agony sample.
+</p>
+ <h3>Further analysis:
+</h3>
+ <p>Using the kernel and windbg we can set the breakpoints and step through the instructions one at a time. 
+</p>
+<p><img src="Images/w5_6.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+
+ <p>By stepping through the instructions one by one we can find the offset for each instruction:
+</p>
+ <p>NtEnumerateValueKey = 84 bytes
+</p>
+ <p>NtQueryDirectoryFile = 54 bytes
+</p>
+ <p>NtQuerySystemInformation = 26 bytes
+</p>
+ <p>From there we can finally remap the original pointers so there are no more suspicious values.
+</p>
+ <p></p>
+ <p><img src="Images/w5_7.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+
+ 
+
+</div>
+</div>
+</div>
+
+</body>
+</html>
