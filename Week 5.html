@@ -26,22 +26,22 @@
  <p>The lab begins with running analizer.py, which we get familiar with in the previous week, on the now renamed “bad” malware file (Agony). 
 </p>
 
-<p><img src="Images/w5_1.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+<p><img src="Images/w5_1.PNG" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
 
  <p>I can then run the command  “dir *.sys” to bring up normally hidden system files, which shows us the new file “wininit.sys”. This comes up now where it wouldn't with the command “dir *.*” due to differences in the API’s being called.
 </p>
 
-<p><img src="Images/w5_2.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+<p><img src="Images/w5_2.PNG" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
 
  <p>Using the tool Tuluka we can clearly see that the rootkit is hooking in its new code, changing pointers, and filtering on the name “wininit.sys”
 </p>
 
-<p><img src="Images/w5_3.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+<p><img src="Images/w5_3.PNG" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
 
  <p>I can then take a look using LiveKD, which is a tool that can read Windows kernel memory and display it on the shell. 
 </p>
  
-<p><img src="Images/w5_4.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+<p><img src="Images/w5_4.PNG" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
  <p>From here I can compare the code at the old and new address for NtEnumerateValueKey to see that it now points to the code in “wininit.sys”. Fortunately LiveKD has a quick tool to correct the pointers which un-hides “wininit.sys”. The last important command from the lab is “dps nt!kiServiceTable L191” which gives a list of all API’s running. This is another way to spot the address change with the new bad file.
 </p>
 <p><img src="Images/w5_5.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
@@ -51,7 +51,7 @@
 </h3>
  <p>Using the kernel and windbg we can set the breakpoints and step through the instructions one at a time. 
 </p>
-<p><img src="Images/w5_6.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+<p><img src="Images/w5_6.PNG" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
 
  <p>By stepping through the instructions one by one we can find the offset for each instruction:
 </p>
@@ -64,7 +64,7 @@
  <p>From there we can finally remap the original pointers so there are no more suspicious values.
 </p>
  <p></p>
- <p><img src="Images/w5_7.png" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
+ <p><img src="Images/w5_7.PNG" alt="HTML5 Icon" style="width:600px;height:400px;" class="center"></p>
 
  
 
