@@ -53,13 +53,13 @@ SQL Injection:</p>
 </p> 
 <p>For the XSS attack we are given a user information page, and all we have to do is empty a field (in this case the street) and enter in the javascript for the alert.
 </p> 
-<p><img src="Images/w7_3.PNG" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
+<p><img src="Images/w7_3.png" alt="HTML5 Icon" style="width:500px;height:500px;" class="center"></p>
 
 <p>Javascript: <script>alert(‘Hey’);</script>
 </p> 
 <p>And when the profile is opened the javascript is run:
 </p> 
-<p><img src="Images/w7_4.PNG" alt="HTML5 Icon" style="width:400px;height:250px;" class="center"></p>
+<p><img src="Images/w7_4.png" alt="HTML5 Icon" style="width:400px;height:250px;" class="center"></p>
 
 <p>The 2nd part was very easy and actually identical to something discussed in the lecture, to get past the Improper Error Handling section, all that has to be done is to change the password variable name to something else, this will cause the authentication to “fail” in the wat we want, logging in instead of throwing the proper error. 
 </p> 
